@@ -1,59 +1,43 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using KopiusLibrary.Models.Entities;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System.IdentityModel.Tokens.Jwt;
+using KopiusLibrary.Services.Models;
 using Microsoft.AspNetCore.Authorization;
+using KopiusLibrary.Services;
+using System.Security.Claims;
 
 
 namespace KopiusLibrary.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
-        private readonly IConfiguration _config;
+        private readonly IAuthService _config;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(IAuthService configuration)
         {
             _config = configuration;
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok("Hello World");
+            string name = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+            return Ok($"Hello {name}");
         }
 
         [HttpPost]
-        [Route("login")]
-        public IActionResult Login(Auth auth)
+        [Route("Login")]
+        public IActionResult Post(Auth auth)
         {
-            if (auth.Username == "admin" && auth.Password == "admin")
-            {
-                var token = GenerateToken();
+            var token = _config.Login(auth);
 
-                return Ok(token);
+            if (token == null || token == string.Empty)
+            {
+                return BadRequest(new { message = "UserName or Password is incorrect" });
             }
 
-            return BadRequest();
-        }
-
-        private string GenerateToken()
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var jwtInfo = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(4)),
-                signingCredentials: credentials
-                );
-
-            var token = new JwtSecurityTokenHandler().WriteToken(jwtInfo);
-
-            return token;
+            return Ok(token);
         }
 
         //[Authorize]

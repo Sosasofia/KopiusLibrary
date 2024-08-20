@@ -1,4 +1,5 @@
 ﻿using KopiusLibrary.Models.Entities;
+using KopiusLibrary.Services.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace KopiusLibrary.Models
