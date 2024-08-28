@@ -1,4 +1,6 @@
 ﻿using KopiusLibrary.Models.Entities;
+using KopiusLibrary.Models.DTO;
+
 
 namespace KopiusLibrary.Repositories
 {

@@ -1,4 +1,5 @@
 ﻿using KopiusLibrary.Models.Entities;
+using KopiusLibrary.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using KopiusLibrary.Repositories;

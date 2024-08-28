@@ -1,16 +1,11 @@
 ﻿using KopiusLibrary.Models.Entities;
+using KopiusLibrary.Models.DTO;
 using KopiusLibrary.Models;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace KopiusLibrary.Repositories
 {
-    public class BookDto
-    {
-        public string Title { get; set; }
-        public List<string> AuthorNames { get; set; }
-        public List<string> Genres { get; set; }
-    }
 
     public class BookRepository : IBookRepository
     {
@@ -23,16 +18,27 @@ namespace KopiusLibrary.Repositories
 
         public async Task<IEnumerable<BookDto>> Books()
         {
-            var bookDto = await _context.Books
+            var books = await _context.Books
                 .Select(b => new BookDto
                 {
                     Title = b.Title,
-                    AuthorNames = b.BookAuthors.Select(ba => ba.Author.Name).ToList(),
-                    Genres = b.BookGenres.Select(x => x.Genre.Name).ToList()
+                    Authors = b.BookAuthors
+                        .Select(ba => new AuthorDto
+                        {
+                            AuthorId = ba.Author.Id,
+                            Name = ba.Author.Name
+                        })
+                        .ToList(),
+                    Genres = b.BookGenres
+                        .Select(g => new GenreDto
+                        {
+                            GenreId = g.GenreId,
+                            Name = g.Genre.Name
+                        })
                 })
                 .ToListAsync();
 
-            return bookDto;
+            return books;
         }
 
         public async Task<BookDto> GetBook(string title)
@@ -41,11 +47,21 @@ namespace KopiusLibrary.Repositories
                 .Select(b => new BookDto
                 {
                     Title = b.Title,
-                    AuthorNames = b.BookAuthors.Select(ba => ba.Author.Name).ToList(),
-                    Genres = b.BookGenres.Select(bg => bg.Genre.Name).ToList()
+                    Authors = b.BookAuthors
+                        .Select(ba => new AuthorDto
+                        {
+                            AuthorId = ba.Author.Id,
+                            Name = ba.Author.Name
+                        })
+                        .ToList(),
+                    Genres = b.BookGenres
+                        .Select(g => new GenreDto
+                        {
+                            GenreId = g.GenreId,
+                            Name = g.Genre.Name
+                        })
                 })
                 .FirstOrDefaultAsync(b => b.Title.Contains(title));
-       
 
             return book;
         }
