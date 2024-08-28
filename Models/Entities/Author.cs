@@ -9,6 +9,6 @@
         public string? Country { get; set; }
 
        
-        public IEnumerable<AuthorBook> BookAuthors { get; set; } = new List<AuthorBook>();
+        public IEnumerable<AuthorBook> BookAuthors { get; set; } 
     }
 }

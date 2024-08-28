@@ -71,7 +71,7 @@ namespace KopiusLibrary.Models
             //    .WithMany(x => x.BookGenres)
             //    .HasForeignKey(x => x.BookId);
 
-            
+
 
             // Overwrite to singular
             modelBuilder.Entity<Book>().ToTable("Book");

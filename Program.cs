@@ -6,6 +6,7 @@ using System.Text;
 using KopiusLibrary.Services;
 using Microsoft.OpenApi.Models;
 using KopiusLibrary.Repositories;
+using KopiusLibrary.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,6 +65,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 

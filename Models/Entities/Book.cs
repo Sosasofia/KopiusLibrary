@@ -14,8 +14,8 @@ namespace KopiusLibrary.Models.Entities
         public Publisher Publisher { get; set; }
 
 
-        public IEnumerable<AuthorBook> BookAuthors { get; set; } = Enumerable.Empty<AuthorBook>();
-        public IEnumerable<BookGenre> BookGenres { get; set; } = Enumerable.Empty<BookGenre>();
+        public IEnumerable<AuthorBook> BookAuthors { get; set; } 
+        public IEnumerable<BookGenre> BookGenres { get; set; }
         public IEnumerable<Reservation>? Reservations { get; set; }
     }
 }
