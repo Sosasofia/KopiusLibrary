@@ -29,19 +29,19 @@ namespace KopiusLibrary.Services
                 return string.Empty;
             }
 
-            var userToken = GenerateToken(userCredentials);
+            var userToken = GenerateToken2(userCredentials);
 
             return userToken;
         }
 
         private string GenerateToken(Auth auth)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetValue<string>("Jwt:Key")));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
             var claims = new List<Claim> {
-                new Claim(ClaimTypes.Name, auth.Username),
-                new Claim(ClaimTypes.Role, auth.Role),
+                new Claim(ClaimTypes.Name, auth.Username!),
+                new Claim(ClaimTypes.Role, auth.Role!),
             };
 
             var jwtInfo = new JwtSecurityToken(
@@ -54,6 +54,27 @@ namespace KopiusLibrary.Services
             var token = new JwtSecurityTokenHandler().WriteToken(jwtInfo);
 
             return token;
+        }
+
+        private string GenerateToken2(Auth auth)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+
+            var tokenDescriptor = new SecurityTokenDescriptor{
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Role, "admin"),
+                }),
+                Expires = DateTime.UtcNow.Add(TimeSpan.FromMinutes(30)),
+                SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature),
+                Issuer = _config["Jwt:Issuer"]
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            string userToken = tokenHandler.WriteToken(token);
+
+            return userToken;
         }
     }
 }

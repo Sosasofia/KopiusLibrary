@@ -1,10 +1,9 @@
 ﻿namespace KopiusLibrary.Models.Entities
 {
-    public class Supplier
+    public class DocumentType
     {
         public Guid Id { get; set; }
+
         public string? Name { get; set; }
-        public string? Phone { get; set; }
-        public string? Email { get; set; }
     }
 }
