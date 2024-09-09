@@ -12,7 +12,6 @@ namespace KopiusLibrary.Models.Entities
 
         public string? Email { get; set; }
 
-    
-        public IEnumerable<Book>? Books { get; set; } = new List<Book>();
+        public IEnumerable<Book>? Books { get; set; } 
     }
 }

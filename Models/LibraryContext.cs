@@ -30,47 +30,47 @@ namespace KopiusLibrary.Models
         public DbSet<Tax> Taxs { get; set; }
 
 
+        public DbSet<AuthorBook> AuthorBook { get; set; }
+        public DbSet<BookGenre> GenreBook { get; set; }
 
         public DbSet<Auth> Auth { get; set; }
+
+
+        public DbSet<AuthorBook> AuthorsBooks { get; set; }
+        public DbSet<BookGenre> BooksGenres { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<Book>()
-            //.HasMany(b => b.Authors)
-            //.WithMany(a => a.Books)
-            //.UsingEntity(j => j.ToTable("AuthorBook"));
 
-            //modelBuilder.Entity<AuthorBook>()
-            //    .HasKey(bg => bg.Id);
+            modelBuilder.Entity<AuthorBook>()
+                .HasKey(bg => bg.Id);
 
+            modelBuilder.Entity<AuthorBook>()
+                .HasOne(ba => ba.Book)
+                .WithMany(b => b.BookAuthors)
+                .HasForeignKey(ba => ba.BookId);
 
-            //modelBuilder.Entity<AuthorBook>()
-            //    .HasOne(ba => ba.Book)
-            //    .WithMany(b => b.BookAuthors)
-            //    .HasForeignKey(ba => ba.BookId);
-
-            //modelBuilder.Entity<AuthorBook>()
-            //    .HasOne(ba => ba.Author)
-            //    .WithMany(a => a.BookAuthors)
-            //    .HasForeignKey(ba => ba.AuthorId);
+            modelBuilder.Entity<AuthorBook>()
+                .HasOne(ba => ba.Author)
+                .WithMany(a => a.BookAuthors)
+                .HasForeignKey(ba => ba.AuthorId);
 
 
-            //modelBuilder.Entity<BookGenre>()
-            //    .HasKey(bg => bg.Id);
+            modelBuilder.Entity<BookGenre>()
+                .HasKey(bg => bg.Id);
 
-            //modelBuilder.Entity<BookGenre>()
-            //    .HasOne(x => x.Genre)
-            //    .WithMany(x => x.BookGenres)
-            //    .HasForeignKey(x => x.GenreId);
+            modelBuilder.Entity<BookGenre>()
+                .HasOne(x => x.Genre)
+                .WithMany(x => x.BookGenres)
+                .HasForeignKey(x => x.GenreId);
 
-            //modelBuilder.Entity<BookGenre>()
-            //    .HasOne(x => x.Book)
-            //    .WithMany(x => x.BookGenres)
-            //    .HasForeignKey(x => x.BookId);
-
+            modelBuilder.Entity<BookGenre>()
+                .HasOne(x => x.Book)
+                .WithMany(x => x.BookGenres)
+                .HasForeignKey(x => x.BookId);
 
 
             // Overwrite to singular

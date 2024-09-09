@@ -6,13 +6,16 @@ namespace KopiusLibrary.Repositories
 {
     public interface IBookRepository
     {
-        //IEnumerable<BookDto> Books();
-        Task<IEnumerable<BookDto>> Books();    
+        Task<IEnumerable<BookDto>> All();
 
-        Task<Book> CreateBook(Book book);
+        Task<BookDto> ByTitle(string title);
 
-        Task<BookDto> GetBook(string title);
+        void Create(BookCreationDto dto); 
 
-        void DeleteBook(Book book);
+        void Update(Book product);
+
+        void Delete(Book book);
+
+        bool ByIsbn(string isbn);
     }
 }

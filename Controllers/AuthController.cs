@@ -18,13 +18,6 @@ namespace KopiusLibrary.Controllers
             _config = configuration;
         }
 
-        [Authorize(Roles = "admin")]
-        [HttpGet]
-        public IActionResult Get()
-        {
-            string name = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Name).Value;
-            return Ok($"Hello {name}");
-        }
 
         [HttpPost]
         [Route("Login")]
@@ -39,16 +32,5 @@ namespace KopiusLibrary.Controllers
 
             return Ok(token);
         }
-
-        //[Authorize]
-        //public ActionResult Logout()
-        //{
-        //}
-
-        //[HttpPost]
-        //[Route("login")]
-        //public ActionResult Login(string username, string password)
-        //{
-        //}
     }
 }

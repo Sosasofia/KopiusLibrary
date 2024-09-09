@@ -29,34 +29,12 @@ namespace KopiusLibrary.Services
                 return string.Empty;
             }
 
-            var userToken = GenerateToken2(userCredentials);
+            var userToken = GenerateToken(userCredentials);
 
             return userToken;
         }
 
         private string GenerateToken(Auth auth)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
-
-            var claims = new List<Claim> {
-                new Claim(ClaimTypes.Name, auth.Username!),
-                new Claim(ClaimTypes.Role, auth.Role!),
-            };
-
-            var jwtInfo = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                claims: claims,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(4)),
-                signingCredentials: credentials
-            );
-
-            var token = new JwtSecurityTokenHandler().WriteToken(jwtInfo);
-
-            return token;
-        }
-
-        private string GenerateToken2(Auth auth)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
@@ -65,6 +43,7 @@ namespace KopiusLibrary.Services
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Role, "admin"),
+                    new Claim(ClaimTypes.Name, auth.Username),
                 }),
                 Expires = DateTime.UtcNow.Add(TimeSpan.FromMinutes(30)),
                 SigningCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature),
